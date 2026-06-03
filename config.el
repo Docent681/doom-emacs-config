@@ -116,9 +116,6 @@
 
 (setq lsp-clients-clangd-executable "clangd")
 
-;; Автоматический LSP для всех C/C++ файлов (даже вне проекта)
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'c++-mode-hook #'lsp)
 
-;; Либо ещё проще — сделать LSP глобальным для всех языков, где он поддерживается
-;; (global-lsp-mode t)
