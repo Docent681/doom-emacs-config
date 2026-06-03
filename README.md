@@ -10,7 +10,7 @@ At the moment, I've implemented only the bare essentials for working on c/c++ an
 - enabled most useful packages in init.el like vterm, lsp, treemacs etc;
 - added package for integration of Cyrillic alphabet in evil mode;
 - added lsp-servers for autocorrection and code completion;
-- configured usage of default icons and fonts for doom;
+- configured usage of default icons and fonts for doom.
 
 ## Usage
 
