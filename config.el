@@ -35,6 +35,7 @@
 (setq doom-theme 'doom-one)
 (setq doom-modeline-icon t)
 (setq treemacs-use-icons t)
+(setq treemacs-show-hidden-files t)
 (setq doom-font (font-spec :family "Fira Code Nerd Font" :size 14))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -84,10 +85,44 @@
 (use-package! projectile
   :config
   (projectile-mode +1)
-  (setq projectile-project-search-path '("~/")) ;; ваши пути
+  (setq projectile-project-search-path '("~/"))
   (setq projectile-switch-project-action 'projectile-dired))
 
-(add-hook 'python-mode-hook #'lsp)
+;;Настройки для языковых серверов
+(use-package! verilog-ext
+  :after verilog-ext
+  :config
+  (setq verilog-ext-eglot-set-server 'verible)
+  (verilog-ext-mode 1))
+
+(after! eglot
+  ;; verible
+  (add-to-list 'eglot-server-programs
+               '(verilog-mode . ("verible-verilog-ls")))
+  (add-to-list 'eglot-server-programs
+               '(verilog-ext-mode . ("verible-verilog-ls")))
+
+  ;; clangd
+  (add-to-list 'eglot-server-programs
+               '(c-mode . ("clang")))
+  (add-to-list 'eglot-server-programs
+               '(c++-mode . ("clang")))
+  (add-to-list 'eglot-server-programs
+               '(c-ts-mode . ("clang")))
+  (add-to-list 'eglot-server-programs
+               '(c++-ts-mode . ("clang"))))
+
+;; Настройки для чекеров синтаксиса
+
+(after! flycheck
+  (flycheck-define-checker verilog-verible
+    "Verible lint checker."
+    :command ("verible-verilog-lint" source)
+    :error-patterns
+    ((error   line-start (file-name) ":" line ":" column ": " (message) line-end)
+     (warning line-start (file-name) ":" line ":" column ": " (message) line-end))
+    :modes (verilog-mode verilog-ext-mode))
+  (add-to-list 'flycheck-checkers 'verilog-verible))
 
 (use-package! company
   :defer 2
@@ -116,6 +151,11 @@
 
 (setq lsp-clients-clangd-executable "clangd")
 
-(add-hook 'c-mode-hook #'lsp)
-(add-hook 'c++-mode-hook #'lsp)
-
+;; hooks for languages
+(add-hook 'python-mode-hook #'eglot-ensure)
+(add-hook 'c-mode-hook #'eglot-ensure)
+(add-hook 'c++-mode-hook #'eglot-ensure)
+(add-hook 'java-mode-hook #'eglot-ensure)
+(add-hook 'verilog-mode-hook #'eglot-ensure)
+(add-hook 'c-mode-hook    #'eglot-ensure)
+(add-hook 'c++-mode-hook  #'eglot-ensure)

@@ -61,3 +61,4 @@
 (package! company)
 (package! company-box)
 (package! reverse-im)
+(package! verilog-ext)
