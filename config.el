@@ -89,11 +89,15 @@
   (setq projectile-switch-project-action 'projectile-dired))
 
 ;;Настройки для языковых серверов
-(use-package! verilog-ext
-  :after verilog-ext
-  :config
-  (setq verilog-ext-eglot-set-server 'verible)
-  (verilog-ext-mode 1))
+;;(use-package! verilog-ext
+ ;;( :after verilog-ext
+ ;;( :config
+ ;;( (setq verilog-ext-eglot-set-server 'verible)
+ ;;( (verilog-ext-mode 1))
+
+(after! verilog-mode
+  (add-to-list 'eglot-server-programs
+               '(verilog-mode . ("verible-verilog-ls"))))
 
 (after! eglot
   ;; verible
@@ -104,13 +108,13 @@
 
   ;; clangd
   (add-to-list 'eglot-server-programs
-               '(c-mode . ("clang")))
+               '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs
-               '(c++-mode . ("clang")))
+               '(c++-mode . ("clangd")))
   (add-to-list 'eglot-server-programs
-               '(c-ts-mode . ("clang")))
+               '(c-ts-mode . ("clangd")))
   (add-to-list 'eglot-server-programs
-               '(c++-ts-mode . ("clang"))))
+               '(c++-ts-mode . ("clangd"))))
 
 ;; Настройки для чекеров синтаксиса
 
@@ -129,8 +133,8 @@
   :diminish
   :custom
   (company-begin-commands '(self-insert-command))
-  (company-idle-delay .1)
-  (company-minimum-prefix-length 2)
+  (company-idle-delay .3)
+  (company-minimum-prefix-length 3)
   (company-show-numbers t)
   (company-tooltip-align-annotations 't)
   (global-company-mode t))
@@ -140,7 +144,7 @@
   :diminish
   :hook (company-mode . company-box-mode))
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;;(add-hook 'after-init-hook #'global-flycheck-mode)
 
 (use-package! flycheck)
 
@@ -149,7 +153,7 @@
   (reverse-im-activate "russian-computer")
 (setq reverse-im-input-methods '("russian-computer")))
 
-(setq lsp-clients-clangd-executable "clangd")
+;;(setq lsp-clients-clangd-executable "clangd")
 
 ;; hooks for languages
 (add-hook 'python-mode-hook #'eglot-ensure)
@@ -157,5 +161,6 @@
 (add-hook 'c++-mode-hook #'eglot-ensure)
 (add-hook 'java-mode-hook #'eglot-ensure)
 (add-hook 'verilog-mode-hook #'eglot-ensure)
-(add-hook 'c-mode-hook    #'eglot-ensure)
-(add-hook 'c++-mode-hook  #'eglot-ensure)
+
+;; changing numbering for coding purposes
+(setq display-line-numbers-type 'relative)
