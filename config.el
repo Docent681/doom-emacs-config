@@ -79,34 +79,51 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;;Ensuring emacs recognises theese
+(add-to-list 'auto-mode-alist '("\\.sv\\'"  . verilog-mode))
+(add-to-list 'auto-mode-alist '("\\.svh\\'" . verilog-mode))
+(add-to-list 'auto-mode-alist '("\\.v\\'"   . verilog-mode))
+(add-to-list 'auto-mode-alist '("\\.vh\\'"  . verilog-mode))
+
+(add-to-list 'auto-mode-alist '("\\.l$" . lex-mode))
+(add-to-list 'auto-mode-alist '("\\.y$" . yacc-mode))
+(add-to-list 'auto-mode-alist '("\\.lex$" . lex-mode))
+(add-to-list 'auto-mode-alist '("\\.yacc$" . yacc-mode))
+
+
+;; ensuring neotree uses icons
 (after! neotree
   (setq neo-theme 'icons))
 
+;; ensuring projectile finds all projects in $HOME
 (use-package! projectile
   :config
   (projectile-mode +1)
   (setq projectile-project-search-path '("~/"))
   (setq projectile-switch-project-action 'projectile-dired))
 
-;;Настройки для языковых серверов
-;;(use-package! verilog-ext
- ;;( :after verilog-ext
- ;;( :config
- ;;( (setq verilog-ext-eglot-set-server 'verible)
- ;;( (verilog-ext-mode 1))
+;; configuration for language servers
+
+;; ensuring verilog knows about verible LS
+;; (needs to be downloaded from github
+;; and to be added to $PATH)
+(use-package! verilog-ext
+  :after verilog-mode
+  :config
+  (setq verilog-ext-eglot-set-server 'verible))
 
 (after! verilog-mode
   (add-to-list 'eglot-server-programs
                '(verilog-mode . ("verible-verilog-ls"))))
 
 (after! eglot
-  ;; verible
+  ;;verilog
   (add-to-list 'eglot-server-programs
                '(verilog-mode . ("verible-verilog-ls")))
   (add-to-list 'eglot-server-programs
                '(verilog-ext-mode . ("verible-verilog-ls")))
 
-  ;; clangd
+  ;;c/c++
   (add-to-list 'eglot-server-programs
                '(c-mode . ("clangd")))
   (add-to-list 'eglot-server-programs
@@ -116,8 +133,9 @@
   (add-to-list 'eglot-server-programs
                '(c++-ts-mode . ("clangd"))))
 
-;; Настройки для чекеров синтаксиса
-
+;; syntax checker configuration
+;; (not sure if really nedeed with eglot)
+(use-package! flycheck)
 (after! flycheck
   (flycheck-define-checker verilog-verible
     "Verible lint checker."
@@ -128,6 +146,7 @@
     :modes (verilog-mode verilog-ext-mode))
   (add-to-list 'flycheck-checkers 'verilog-verible))
 
+;; company configuration for autocompletion in code
 (use-package! company
   :defer 2
   :diminish
@@ -144,16 +163,11 @@
   :diminish
   :hook (company-mode . company-box-mode))
 
-;;(add-hook 'after-init-hook #'global-flycheck-mode)
-
-(use-package! flycheck)
-
+;; configuration for russian keyboard in evil mode
 (use-package! reverse-im
   :config
   (reverse-im-activate "russian-computer")
-(setq reverse-im-input-methods '("russian-computer")))
-
-;;(setq lsp-clients-clangd-executable "clangd")
+  (setq reverse-im-input-methods '("russian-computer")))
 
 ;; hooks for languages
 (add-hook 'python-mode-hook #'eglot-ensure)
@@ -161,6 +175,16 @@
 (add-hook 'c++-mode-hook #'eglot-ensure)
 (add-hook 'java-mode-hook #'eglot-ensure)
 (add-hook 'verilog-mode-hook #'eglot-ensure)
+(add-hook 'verilog-ext-mode-hook #'eglot-ensure)
 
 ;; changing numbering for coding purposes
 (setq display-line-numbers-type 'relative)
+
+;; Ensuring UTF-8 is prefered
+(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8-unix)
+(add-to-list 'file-coding-system-alist '("\\.txt\\'" . utf-8-unix))
