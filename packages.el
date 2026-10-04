@@ -54,11 +54,10 @@
 ;; (unpin! t)
 
 (package! all-the-icons)
-
 (package! projectile)
-(package! lsp-pyright)
+;;(package! lsp-pyright)
 (package! pip-requirements)
-(package! company)
-(package! company-box)
+;;(package! company)
+;;(package! company-box)
 (package! reverse-im)
 (package! verilog-ext)

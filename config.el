@@ -147,21 +147,21 @@
   (add-to-list 'flycheck-checkers 'verilog-verible))
 
 ;; company configuration for autocompletion in code
-(use-package! company
-  :defer 2
-  :diminish
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .3)
-  (company-minimum-prefix-length 3)
-  (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
+;;(use-package! company
+  ;;:defer 2
+  ;;:diminish
+  ;;:custom
+  ;;(company-begin-commands '(self-insert-command))
+  ;;(company-idle-delay .3)
+  ;;(company-minimum-prefix-length 3)
+  ;;(company-show-numbers t)
+  ;;(company-tooltip-align-annotations 't)
+  ;;(global-company-mode t))
 
-(use-package! company-box
-  :after company
-  :diminish
-  :hook (company-mode . company-box-mode))
+;;(use-package! company-box
+  ;;:after company
+  ;;:diminish
+  ;;:hook (company-mode . company-box-mode))
 
 ;; configuration for russian keyboard in evil mode
 (use-package! reverse-im
@@ -176,6 +176,9 @@
 (add-hook 'java-mode-hook #'eglot-ensure)
 (add-hook 'verilog-mode-hook #'eglot-ensure)
 (add-hook 'verilog-ext-mode-hook #'eglot-ensure)
+(add-hook 'verilog-ext-mode-hook #'eglot-ensure)
+(add-hook 'sh-mode-hook #'eglot-ensure)
+(add-hook 'bash-ts-mode-hook #'eglot-ensure)
 
 ;; changing numbering for coding purposes
 (setq display-line-numbers-type 'relative)
